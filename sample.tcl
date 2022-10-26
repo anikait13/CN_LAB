@@ -20,61 +20,58 @@ set n0 [$ns node]
 set n1 [$ns node]
 set n2 [$ns node]
 set n3 [$ns node]
-set n4 [$ns node]
-set n5 [$ns node]
-
 
 # create links between the nodes
-$ns duplex-link $n0 $n1 2Mb 10ms DropTail
 $ns duplex-link $n0 $n2 2Mb 10ms DropTail
-$ns duplex-link $n0 $n3 2Mb 10ms DropTail
-$ns duplex-link $n0 $n4 2Mb 10ms DropTail
-$ns duplex-link $n0 $n5 2Mb 10ms DropTail
+$ns duplex-link $n1 $n2 2Mb 10ms DropTail
+$ns duplex-link $n2 $n3 1.7Mb 20ms DropTail
 
+
+# UDP traffic source
+# create a UDP agent and attach it to node node 1
+set udp [new Agent/UDP]
+$ns attach-agent $n1 $udp
 
 # create a TCP agent and attach it to node node 0
 set tcp [new Agent/TCP]
 $ns attach-agent $n0 $tcp
 
 
+# create a CBR traffic source and attach it to udp
+set cbr [new Application/Traffic/CBR]
+$cbr set packetSize_ 500
+$cbr set interval_ 0.005
+$cbr attach-agent $udp
+
 # create a FTP traffic source and attach it to tcp
 set ftp [new Application/FTP]
 set maxpkts_ 1000
 $ftp attach-agent $tcp
 
+# creat a Null agent (a traffic sink) and at
+set null [new Agent/Null]
+$ns attach-agent $n3 $null
+$ns connect $udp $null
 
-# create a Sink agent (a traffic sink) and at
-set sink1 [new Agent/TCPSink]
-$ns attach-agent $n1 $sink1
-$ns connect $tcp $sink1
 
-set sink2 [new Agent/TCPSink]
-$ns attach-agent $n2 $sink2
-$ns connect $tcp $sink2
-
-set sink3 [new Agent/TCPSink]
-$ns attach-agent $n3 $sink3
-$ns connect $tcp $sink3
-
-set sink4 [new Agent/TCPSink]
-$ns attach-agent $n4 $sink4
-$ns connect $tcp $sink4
-
-set sink5 [new Agent/TCPSink]
-$ns attach-agent $n5 $sink5
-$ns connect $tcp $sink5
+# creat a Sink agent (a traffic sink) and at
+set sink [new Agent/TCPSink]
+$ns attach-agent $n3 $sink
+$ns connect $tcp $sink
 
 
 # schedule events for all the flows
-
-$ns at 0.1 "$ftp start"
+$ns at 0.1 "$cbr start"
+$ns at 1.0 "$ftp start"
 $ns at 4.0 "$ftp stop"
-
+$ns at 4.5 "$cbr stop"
 
 
 # call the finish procedure after 6 seconds of simulation time
 $ns at 5.0 "finish"
 
+# Print CBR packet size and interval
+puts "CBR packet size = [$cbr set packet_size_]"
 
 # run the simulation
 $ns run
