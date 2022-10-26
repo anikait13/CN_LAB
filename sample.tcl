@@ -44,25 +44,25 @@ $ftp attach-agent $tcp
 
 
 # create a Sink agent (a traffic sink) and at
-set sink [new Agent/TCPSink]
-$ns attach-agent $n1 $sink
-$ns connect $tcp $sink
+set sink1 [new Agent/TCPSink]
+$ns attach-agent $n1 $sink1
+$ns connect $tcp $sink1
 
-set sink [new Agent/TCPSink]
-$ns attach-agent $n2 $sink
-$ns connect $tcp $sink
+set sink2 [new Agent/TCPSink]
+$ns attach-agent $n2 $sink2
+$ns connect $tcp $sink2
 
-set sink [new Agent/TCPSink]
-$ns attach-agent $n3 $sink
-$ns connect $tcp $sink
+set sink3 [new Agent/TCPSink]
+$ns attach-agent $n3 $sink3
+$ns connect $tcp $sink3
 
-set sink [new Agent/TCPSink]
-$ns attach-agent $n4 $sink
-$ns connect $tcp $sink
+set sink4 [new Agent/TCPSink]
+$ns attach-agent $n4 $sink4
+$ns connect $tcp $sink4
 
-set sink [new Agent/TCPSink]
-$ns attach-agent $n5 $sink
-$ns connect $tcp $sink
+set sink5 [new Agent/TCPSink]
+$ns attach-agent $n5 $sink5
+$ns connect $tcp $sink5
 
 
 # schedule events for all the flows
