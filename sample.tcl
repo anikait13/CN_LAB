@@ -34,7 +34,7 @@ $ns duplex-link $n0 $n5 2Mb 10ms DropTail
 
 # create a TCP agent and attach it to node node 0
 set tcp [new Agent/TCP]
-$ns attach-agent $n1 $tcp
+$ns attach-agent $n0 $tcp
 
 
 # create a FTP traffic source and attach it to tcp
@@ -45,7 +45,23 @@ $ftp attach-agent $tcp
 
 # create a Sink agent (a traffic sink) and at
 set sink [new Agent/TCPSink]
+$ns attach-agent $n1 $sink
+$ns connect $tcp $sink
+
+set sink [new Agent/TCPSink]
+$ns attach-agent $n2 $sink
+$ns connect $tcp $sink
+
+set sink [new Agent/TCPSink]
+$ns attach-agent $n3 $sink
+$ns connect $tcp $sink
+
+set sink [new Agent/TCPSink]
 $ns attach-agent $n4 $sink
+$ns connect $tcp $sink
+
+set sink [new Agent/TCPSink]
+$ns attach-agent $n5 $sink
 $ns connect $tcp $sink
 
 
