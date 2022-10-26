@@ -1,0 +1,55 @@
+# it goes from node 1 to 4 
+
+
+set ns [new Simulator]
+
+set nf [open out.nam w]
+$ns namtrace-all $nf
+
+proc finish {} {
+global ns nf
+$ns flush-trace
+close $nfduplex
+exec nam out.nam &
+exit 0
+}
+
+set 0 [$ns node]
+set 1 [$ns node]
+set 2 [$ns node]
+set 3 [$ns node]
+set 4 [$ns node]
+set 5 [$ns node]
+
+
+$ns color 0 red
+
+$ns duplex-link $0 $1 2Mb 10ms DropTail
+$ns duplex-link $0 $2 2Mb 10ms DropTail
+$ns duplex-link $0 $3 2Mb 10ms DropTail
+$ns duplex-link $0 $4 2Mb 10ms DropTail
+$ns duplex-link $0 $5 2Mb 10ms DropTail
+
+
+set tcp0 [new Agent/TCP]
+$ns attach-agent $1 $tcp0 
+
+set ftp [new Application/FTP]
+$ftp set maxpkts_ 1000
+$ftp attach-agent $tcp0
+
+
+set sink [new Agent/TCPSink]
+$ns attach-agent $4 $sink
+$ns connect $tcp0 $sink
+
+
+$ns at 0.1 "$ftp start"
+$ns at 3.0 "$ftp stop"
+
+
+
+$ns at 5.0 "finish"
+
+
+$ns run
