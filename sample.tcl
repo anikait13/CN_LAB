@@ -26,6 +26,7 @@ $ns duplex-link $n0 $n2 2Mb 10ms DropTail
 $ns duplex-link $n1 $n2 2Mb 10ms DropTail
 $ns duplex-link $n2 $n3 1.7Mb 20ms DropTail
 
+# for LAN set lan0 [$ns newLan "$n0 $n1 $n2 $n3" 0.7Mb 20ms LL Queue/DropTail MAC/Csma/-802_3 channel] 
 
 # UDP traffic source
 # create a UDP agent and attach it to node node 1
